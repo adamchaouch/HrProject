@@ -1,0 +1,33 @@
+version: '3.8'
+volumes:
+  dbdata:
+services:
+  db:
+    image: postgis/postgis
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+        - dbdata:/var/lib/postgresql/data
+    environment:
+        - POSTGRES_DB=hrdb
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=postgres
+  django:
+      container_name: django
+      build:
+        context: ./back
+      command: python manage.py runserver 0.0.0.0:8000
+      volumes:
+          - ./back:/usr/src/app/
+      ports:
+          - 8001:8000
+      environment:
+          - POSTGRES_NAME=hrdb
+          - POSTGRES_USER=postgres
+          - POSTGRES_PASSWORD=postgres
+          - POSTGRES_HOST=db
+          - DJANGO_ENVIRONMENT=development
+          - SECRET_KEY=django-insecure-@&jy$+!%kp5=t(q8k*br0wq==w5shdv)kxoyd+0yxc474cxbth
+          - DEBUG=1
+          - ALLOWED_HOSTS=localhost,127.0.0.1
