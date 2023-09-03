@@ -31,3 +31,13 @@ services:
           - SECRET_KEY=django-insecure-@&jy$+!%kp5=t(q8k*br0wq==w5shdv)kxoyd+0yxc474cxbth
           - DEBUG=1
           - ALLOWED_HOSTS=localhost,127.0.0.1
+  front:
+        build:
+          context: front
+        ports:
+          - '4200:4200'
+        volumes:
+          - ./front/src:/frontend/src
+          
+        depends_on:
+          - django
